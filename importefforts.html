@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <style>
+        th {
+            border: 1px solid black;
+            align: center;
+            font-weight: normal;
+        }
+        td {
+            border: 1px solid black;
+            background-color: #fff2cc;
+        }
+    </style>
+</head>
+<body>
+<h2>Efforts input</h2>
+<form id="myForm" onsubmit="event.preventDefault(); google.script.run.createLoan(this); google.script.host.close()">
+    <label>
+        Agent:
+        <select name="agent" id="agent-select">
+            <? for (var i = 0; i < data.agents.length; i++) { ?>
+            <option value="<?= data.agents[i] ?>"> <?= data.agents[i] ?>
+                <? } ?>
+        </select>
+    </label>
+    <br><br>
+    <label>
+        Date:
+        <input class="date-picker" type="date" name="date">
+    </label>
+    <br><br>
+    <br><br>
+    <label>
+        Efforts:
+
+        <table style="border-spacing: 0px; border-collapse: collapse;">
+            <thead>
+            </thead>
+            <tbody>
+            <tr>
+                <th></th>
+                <th colspan="3" align="center" valign="bottom"><font face="Cambria">Efforts</font></th>
+                <th colspan="7" align="center" valign="bottom"><font face="Cambria">Stats</font></th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Connects</th>
+                <th>Voicemail</th>
+                <th>Dead End</th>
+                <th>App Booked</th>
+                <th>App Completed</th>
+                <th>CMA</th>
+                <th>Hot LIst</th>
+                <th>Pipeline</th>
+                <th>PM Leads</th>
+                <th>Loan Leads</th>
+            </tr>
+            <tr>
+                <th>Open Callbacks</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Cold calls</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Past open</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Sold calls</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Email enquiries</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Incoming Calls / VM Call Backs</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>The bucket</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Door Knocks</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Thankyou Cards Sent</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Little Erics</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Letters Sent</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Appraisal Complete</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Database Outgoing/Incoming Calls</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Pipe Line Calls</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Hot List Calls</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Homeless Calls</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Door Knocks (On DB)</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Referral</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Appraisal Completed (Was ON DB)</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Thankyou Cards Sent</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>i</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>789</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>CMA's/TP's/DB Items Sent</th>
+                <td></td>
+                <td></td>
+                <td>7</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+
+
+            </tbody>
+
+        </table>
+    </label>
+    <br><br>
+    <br>
+    <input type="submit" value="Submit">
+</form><br>
+<input type="button" value="Cancel" onclick="google.script.host.close()" />
+</body>
+</html>
+
+<script type="text/javascript">
+    Date.prototype.toDateInputValue = (function() {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0,10);
+    });
+    Array.from(document.getElementsByClassName('date-picker')).forEach(
+        function(e) {
+            e.value = new Date().toDateInputValue();
+        }
+    );
+    //# sourceURL=somename.js
+</script>
