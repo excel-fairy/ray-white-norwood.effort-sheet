@@ -3,20 +3,33 @@
 <head>
     <base target="_top">
     <style>
+        body {
+            font-family: arial, calibri;
+            font-size: 14px;
+        }
         th {
             border: 1px solid black;
             align: center;
             font-weight: normal;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         td {
             border: 1px solid black;
-            background-color: #fff2cc;
+            max-width: 110px;
+        }
+        td > input {
+            width: 94%;
+        }
+        input.date-picker {
+            font-family: arial, calibri;
         }
     </style>
 </head>
 <body>
-<h2>Efforts input</h2>
-<form id="myForm" onsubmit="event.preventDefault(); google.script.run.createLoan(this); google.script.host.close()">
+<form id="myForm" onsubmit="event.preventDefault(); google.script.run.importEfforts(this); google.script.host.close()">
     <label>
         Agent:
         <select name="agent" id="agent-select">
@@ -25,323 +38,312 @@
                 <? } ?>
         </select>
     </label>
-    <br><br>
-    <label>
+    <label style="margin-left: 10em">
         Date:
-        <input class="date-picker" type="date" name="date">
+        <input class="date-picker" type="date" name="date" required>
     </label>
     <br><br>
     <br><br>
-    <label>
-        Efforts:
-
-        <table style="border-spacing: 0px; border-collapse: collapse;">
-            <thead>
-            </thead>
-            <tbody>
-            <tr>
-                <th></th>
-                <th colspan="3" align="center" valign="bottom"><font face="Cambria">Efforts</font></th>
-                <th colspan="7" align="center" valign="bottom"><font face="Cambria">Stats</font></th>
-            </tr>
-            <tr>
-                <th></th>
-                <th>Connects</th>
-                <th>Voicemail</th>
-                <th>Dead End</th>
-                <th>App Booked</th>
-                <th>App Completed</th>
-                <th>CMA</th>
-                <th>Hot LIst</th>
-                <th>Pipeline</th>
-                <th>PM Leads</th>
-                <th>Loan Leads</th>
-            </tr>
-            <tr>
-                <th>Open Callbacks</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Cold calls</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Past open</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Sold calls</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Email enquiries</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Incoming Calls / VM Call Backs</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>The bucket</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Door Knocks</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Thankyou Cards Sent</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Little Erics</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Letters Sent</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Appraisal Complete</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Database Outgoing/Incoming Calls</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Pipe Line Calls</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Hot List Calls</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Homeless Calls</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Door Knocks (On DB)</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Referral</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Appraisal Completed (Was ON DB)</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Thankyou Cards Sent</th>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>i</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>789</td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>CMA's/TP's/DB Items Sent</th>
-                <td></td>
-                <td></td>
-                <td>7</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-
-
-
-            </tbody>
-
-        </table>
-    </label>
+    <table style="border-spacing: 0px; border-collapse: collapse;">
+        <thead>
+        </thead>
+        <tbody>
+        <tr>
+            <th></th>
+            <th colspan="3" align="center" valign="bottom"><font face="Cambria">Efforts</font></th>
+            <th colspan="7" align="center" valign="bottom"><font face="Cambria">Stats</font></th>
+        </tr>
+        <tr>
+            <th></th>
+            <th>Connects</th>
+            <th>Voicemail</th>
+            <th>Dead End</th>
+            <th>App Booked</th>
+            <th>App Completed</th>
+            <th>CMA</th>
+            <th>Hot List</th>
+            <th>Pipeline</th>
+            <th>PM Leads</th>
+            <th>Loan Leads</th>
+        </tr>
+        <tr>
+            <th>Open Callbacks</th>
+            <td><input type="number" name="a-1"></td>
+            <td><input type="number" name="b-1"></td>
+            <td><input type="number" name="c-1"></td>
+            <td><input type="number" name="d-1"></td>
+            <td><input type="number" name="e-1"></td>
+            <td><input type="number" name="f-1"></td>
+            <td><input type="number" name="g-1"></td>
+            <td><input type="number" name="h-1"></td>
+            <td><input type="number" name="i-1"></td>
+            <td><input type="number" name="j-1"></td>
+        </tr>
+        <tr>
+            <th>Cold calls</th>
+            <td><input type="number" name="a-2"></td>
+            <td><input type="number" name="b-2"></td>
+            <td><input type="number" name="c-2"></td>
+            <td><input type="number" name="d-2"></td>
+            <td><input type="number" name="e-2"></td>
+            <td><input type="number" name="f-2"></td>
+            <td><input type="number" name="g-2"></td>
+            <td><input type="number" name="h-2"></td>
+            <td><input type="number" name="i-2"></td>
+            <td><input type="number" name="j-2"></td>
+        </tr>
+        <tr>
+            <th>Past open</th>
+            <td><input type="number" name="a-3"></td>
+            <td><input type="number" name="b-3"></td>
+            <td><input type="number" name="c-3"></td>
+            <td><input type="number" name="d-3"></td>
+            <td><input type="number" name="e-3"></td>
+            <td><input type="number" name="f-3"></td>
+            <td><input type="number" name="g-3"></td>
+            <td><input type="number" name="h-3"></td>
+            <td><input type="number" name="i-3"></td>
+            <td><input type="number" name="j-3"></td>
+        </tr>
+        <tr>
+            <th>Sold calls</th>
+            <td><input type="number" name="a-4"></td>
+            <td><input type="number" name="b-4"></td>
+            <td><input type="number" name="c-4"></td>
+            <td><input type="number" name="d-4"></td>
+            <td><input type="number" name="e-4"></td>
+            <td><input type="number" name="f-4"></td>
+            <td><input type="number" name="g-4"></td>
+            <td><input type="number" name="h-4"></td>
+            <td><input type="number" name="i-4"></td>
+            <td><input type="number" name="j-4"></td>
+        </tr>
+        <tr>
+            <th>Email enquiries</th>
+            <td><input type="number" name="a-5"></td>
+            <td><input type="number" name="b-5"></td>
+            <td><input type="number" name="c-5"></td>
+            <td><input type="number" name="d-5"></td>
+            <td><input type="number" name="e-5"></td>
+            <td><input type="number" name="f-5"></td>
+            <td><input type="number" name="g-5"></td>
+            <td><input type="number" name="h-5"></td>
+            <td><input type="number" name="i-5"></td>
+            <td><input type="number" name="j-5"></td>
+        </tr>
+        <tr>
+            <th>Incoming Calls / VM Call Backs</th>
+            <td><input type="number" name="a-6"></td>
+            <td><input type="number" name="b-6"></td>
+            <td><input type="number" name="c-6"></td>
+            <td><input type="number" name="d-6"></td>
+            <td><input type="number" name="e-6"></td>
+            <td><input type="number" name="f-6"></td>
+            <td><input type="number" name="g-6"></td>
+            <td><input type="number" name="h-6"></td>
+            <td><input type="number" name="i-6"></td>
+            <td><input type="number" name="j-6"></td>
+        </tr>
+        <tr>
+            <th>The bucket</th>
+            <td><input type="number" name="a-7"></td>
+            <td><input type="number" name="b-7"></td>
+            <td><input type="number" name="c-7"></td>
+            <td><input type="number" name="d-7"></td>
+            <td><input type="number" name="e-7"></td>
+            <td><input type="number" name="f-7"></td>
+            <td><input type="number" name="g-7"></td>
+            <td><input type="number" name="h-7"></td>
+            <td><input type="number" name="i-7"></td>
+            <td><input type="number" name="j-7"></td>
+        </tr>
+        <tr>
+            <th>Door Knocks</th>
+            <td><input type="number" name="a-8"></td>
+            <td><input type="number" name="b-8"></td>
+            <td><input type="number" name="c-8"></td>
+            <td><input type="number" name="d-8"></td>
+            <td><input type="number" name="e-8"></td>
+            <td><input type="number" name="f-8"></td>
+            <td><input type="number" name="g-8"></td>
+            <td><input type="number" name="h-8"></td>
+            <td><input type="number" name="i-8"></td>
+            <td><input type="number" name="j-8"></td>
+        </tr>
+        <tr>
+            <th>Thankyou Cards Sent</th>
+            <td><input type="number" name="a-9"></td>
+            <td><input type="number" name="b-9"></td>
+            <td><input type="number" name="c-9"></td>
+            <td><input type="number" name="d-9"></td>
+            <td><input type="number" name="e-9"></td>
+            <td><input type="number" name="f-9"></td>
+            <td><input type="number" name="g-9"></td>
+            <td><input type="number" name="h-9"></td>
+            <td><input type="number" name="i-9"></td>
+            <td><input type="number" name="j-9"></td>
+        </tr>
+        <tr>
+            <th>Little Erics</th>
+            <td><input type="number" name="a-10"></td>
+            <td><input type="number" name="b-10"></td>
+            <td><input type="number" name="c-10"></td>
+            <td><input type="number" name="d-10"></td>
+            <td><input type="number" name="e-10"></td>
+            <td><input type="number" name="f-10"></td>
+            <td><input type="number" name="g-10"></td>
+            <td><input type="number" name="h-10"></td>
+            <td><input type="number" name="i-10"></td>
+            <td><input type="number" name="j-10"></td>
+        </tr>
+        <tr>
+            <th>Letters Sent</th>
+            <td><input type="number" name="a-11"></td>
+            <td><input type="number" name="b-11"></td>
+            <td><input type="number" name="c-11"></td>
+            <td><input type="number" name="d-11"></td>
+            <td><input type="number" name="e-11"></td>
+            <td><input type="number" name="f-11"></td>
+            <td><input type="number" name="g-11"></td>
+            <td><input type="number" name="h-11"></td>
+            <td><input type="number" name="i-11"></td>
+            <td><input type="number" name="j-11"></td>
+        </tr>
+        <tr>
+            <th>Appraisal Complete</th>
+            <td><input type="number" name="a-12"></td>
+            <td><input type="number" name="b-12"></td>
+            <td><input type="number" name="c-12"></td>
+            <td><input type="number" name="d-12"></td>
+            <td><input type="number" name="e-12"></td>
+            <td><input type="number" name="f-12"></td>
+            <td><input type="number" name="g-12"></td>
+            <td><input type="number" name="h-12"></td>
+            <td><input type="number" name="i-12"></td>
+            <td><input type="number" name="j-12"></td>
+        </tr>
+        <tr>
+            <th>Database Outgoing/Incoming Calls</th>
+            <td><input type="number" name="a-13"></td>
+            <td><input type="number" name="b-13"></td>
+            <td><input type="number" name="c-13"></td>
+            <td><input type="number" name="d-13"></td>
+            <td><input type="number" name="e-13"></td>
+            <td><input type="number" name="f-13"></td>
+            <td><input type="number" name="g-13"></td>
+            <td><input type="number" name="h-13"></td>
+            <td><input type="number" name="i-13"></td>
+            <td><input type="number" name="j-13"></td>
+        </tr>
+        <tr>
+            <th>Pipe Line Calls</th>
+            <td><input type="number" name="a-14"></td>
+            <td><input type="number" name="b-14"></td>
+            <td><input type="number" name="c-14"></td>
+            <td><input type="number" name="d-14"></td>
+            <td><input type="number" name="e-14"></td>
+            <td><input type="number" name="f-14"></td>
+            <td><input type="number" name="g-14"></td>
+            <td><input type="number" name="h-14"></td>
+            <td><input type="number" name="i-14"></td>
+            <td><input type="number" name="j-14"></td>
+        </tr>
+        <tr>
+            <th>Hot List Calls</th>
+            <td><input type="number" name="a-15"></td>
+            <td><input type="number" name="b-15"></td>
+            <td><input type="number" name="c-15"></td>
+            <td><input type="number" name="d-15"></td>
+            <td><input type="number" name="e-15"></td>
+            <td><input type="number" name="f-15"></td>
+            <td><input type="number" name="g-15"></td>
+            <td><input type="number" name="h-15"></td>
+            <td><input type="number" name="i-15"></td>
+            <td><input type="number" name="j-15"></td>
+        </tr>
+        <tr>
+            <th>Homeless Calls</th>
+            <td><input type="number" name="a-16"></td>
+            <td><input type="number" name="b-16"></td>
+            <td><input type="number" name="c-16"></td>
+            <td><input type="number" name="d-16"></td>
+            <td><input type="number" name="e-16"></td>
+            <td><input type="number" name="f-16"></td>
+            <td><input type="number" name="g-16"></td>
+            <td><input type="number" name="h-16"></td>
+            <td><input type="number" name="i-16"></td>
+            <td><input type="number" name="j-16"></td>
+        </tr>
+        <tr>
+            <th>Door Knocks (On DB)</th>
+            <td><input type="number" name="a-17"></td>
+            <td><input type="number" name="b-17"></td>
+            <td><input type="number" name="c-17"></td>
+            <td><input type="number" name="d-17"></td>
+            <td><input type="number" name="e-17"></td>
+            <td><input type="number" name="f-17"></td>
+            <td><input type="number" name="g-17"></td>
+            <td><input type="number" name="h-17"></td>
+            <td><input type="number" name="i-17"></td>
+            <td><input type="number" name="j-17"></td>
+        </tr>
+        <tr>
+            <th>Referral</th>
+            <td><input type="number" name="a-18"></td>
+            <td><input type="number" name="b-18"></td>
+            <td><input type="number" name="c-18"></td>
+            <td><input type="number" name="d-18"></td>
+            <td><input type="number" name="e-18"></td>
+            <td><input type="number" name="f-18"></td>
+            <td><input type="number" name="g-18"></td>
+            <td><input type="number" name="h-18"></td>
+            <td><input type="number" name="i-18"></td>
+            <td><input type="number" name="j-18"></td>
+        </tr>
+        <tr>
+            <th>Appraisal Completed (Was ON DB)</th>
+            <td><input type="number" name="a-19"></td>
+            <td><input type="number" name="b-19"></td>
+            <td><input type="number" name="c-19"></td>
+            <td><input type="number" name="d-19"></td>
+            <td><input type="number" name="e-19"></td>
+            <td><input type="number" name="f-19"></td>
+            <td><input type="number" name="g-19"></td>
+            <td><input type="number" name="h-19"></td>
+            <td><input type="number" name="i-19"></td>
+            <td><input type="number" name="j-19"></td>
+        </tr>
+        <tr>
+            <th>Thankyou Cards Sent</th>
+            <td><input type="number" name="a-20"></td>
+            <td><input type="number" name="b-20"></td>
+            <td><input type="number" name="c-20"></td>
+            <td><input type="number" name="d-20"></td>
+            <td><input type="number" name="e-20"></td>
+            <td><input type="number" name="f-20"></td>
+            <td><input type="number" name="g-20"></td>
+            <td><input type="number" name="h-20"></td>
+            <td><input type="number" name="i-20"></td>
+            <td><input type="number" name="j-20"></td>
+        </tr>
+        <tr>
+            <th>CMA's/TP's/DB Items Sent</th>
+            <td><input type="number" name="a-21"></td>
+            <td><input type="number" name="b-21"></td>
+            <td><input type="number" name="c-21"></td>
+            <td><input type="number" name="d-21"></td>
+            <td><input type="number" name="e-21"></td>
+            <td><input type="number" name="f-21"></td>
+            <td><input type="number" name="g-21"></td>
+            <td><input type="number" name="h-21"></td>
+            <td><input type="number" name="i-21"></td>
+            <td><input type="number" name="j-21"></td>
+        </tr>
+        </tbody>
+    </table>
     <br><br>
-    <br>
-    <input type="submit" value="Submit">
-</form><br>
-<input type="button" value="Cancel" onclick="google.script.host.close()" />
+    <input style="position: absolute; right: 1em; font-size: large" type="submit" value="Submit">
+</form>
 </body>
 </html>
 
@@ -356,5 +358,4 @@
             e.value = new Date().toDateInputValue();
         }
     );
-    //# sourceURL=somename.js
 </script>

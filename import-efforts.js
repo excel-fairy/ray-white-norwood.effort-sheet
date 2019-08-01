@@ -5,106 +5,140 @@
 function openEffortsPopup() {
     var htmlTemplate = HtmlService.createTemplateFromFile('importefforts');
     htmlTemplate.data = {
-        agents: ['e', 'a'],
-        borrowers: ['Antra Group', 'Ray Petty', 'Fundsquire Pty Ltd']
+        agents: getAgents(),
     };
-    var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
-        .setTitle('Import efforts')
-        .setWidth(1500)
-        .setHeight(700);
+    var htmlOutput = htmlTemplate.evaluate()
+        .setTitle('Efforts input')
+        .setWidth(1200)
+        .setHeight(600);
     SpreadsheetApp.getUi().showDialog(htmlOutput);
 }
 
+
+/**
+ * Map
+ * Keys: column
+ * Values: Corresponding efforts
+ */
+var tableColumns = {
+    a: 'Connects',
+    b: 'Voicemail',
+    c: 'Dead End',
+    d: 'App Booked',
+    e: 'App Completed',
+    f: 'CMA',
+    g: 'Hot LIst',
+    h: 'Pipeline',
+    i: 'PM Leads',
+    j: 'Loan Leads'
+};
+
+/**
+ * Map
+ * Keys: row
+ * Values: Corresponding task
+ */
+var tableRows = {
+    1: 'Open Callbacks',
+    2: 'Cold Calls',
+    3: 'Past Open',
+    4: 'Sold Calls',
+    5: 'Email Enquiries',
+    6: 'Incoming Calls / VM Call Backs',
+    7: 'The Bucket',
+    8: 'Door Knocks',
+    9: 'Thankyou Cards Sent',
+    10: 'Little Erics',
+    11: 'Letters Sent',
+    12: 'Appraisal Complete',
+    13: 'Database Outgoing/Incoming Calls',
+    14: 'Pipe Line Calls',
+    15: 'Hot List Calls',
+    16: 'Homeless Calls',
+    17: 'Door Knocks (On DB)',
+    18: 'Referral',
+    19: 'Appraisal Completed (Was ON DB)',
+    20: 'Thankyou Cards Sent',
+    21: 'CMA\'s/TP\'s/DB Items Sent'
+}
 
 /**
  * Main function
  * Called by HTML button in popup
  */
 function importEfforts(data) {
-    SpreadsheetApp.getUi().alert ('Loan is being imported. It will appear in the "Loans" tab shortly');
-    insertLoanInLoansSheet(data);
+    var rowsToInsert = createEffortsRowsEfforts(data);
+    getEffortsToImportRange(rowsToInsert.length).setValues(rowsToInsert);
 }
 
-function insertLoanInLoansSheet(data){
-    // Override loanReference (autocomputed) only if the entity is none of the below
-    if(data.entityName !== 'Dacosi Investments Pty Ltd (Derek Goh)' && data.entityName !== 'Dacosi ST Pty Ltd (Derek Goh)')
-        data.loanReference =  getIncrementedLoanReference(getLastLoanReferenceOfEntity(data.entityName));
-    var rowToInsert = buildLoanToInsert(data);
-    var loansOriginalSheet = INTEREST_STATEMENT_SPREADSHEET.loansSheet.sheet;
-    var lastEntityRow = getLastLoanOfEntityRow(data.entityName);
-    var rangeRowToSet = loansOriginalSheet.getRange(lastEntityRow + 1,
-        ColumnNames.letterToColumn(INTEREST_STATEMENT_SPREADSHEET.loansSheet.firstLoansColumn),
-        1,
-        ColumnNames.letterToColumn(INTEREST_STATEMENT_SPREADSHEET.loansSheet.lastLoansColumn) + 1
-        - ColumnNames.letterToColumn(INTEREST_STATEMENT_SPREADSHEET.loansSheet.firstLoansColumn));
-
-    duplicateLastEntityRow(lastEntityRow);
-    rangeRowToSet.setValues([rowToInsert]);
+/**
+ * Create efforts to insert
+ * @param data form data
+ */
+function createEffortsRowsEfforts(data) {
+    var agent = data.agent;
+    var date = data.date;
+    console.log("Importing efforts for agent '" + agent + "' and date '" + date + "'");
+    return createEffortsAndTasksMatrix(agent, date, data);
 }
 
-// Duplicate row to get all the data that won't be overwritten
-function duplicateLastEntityRow(lastEntityRow){
-    var loansOriginalSheet = INTEREST_STATEMENT_SPREADSHEET.loansSheet.sheet;
-    loansOriginalSheet.insertRowAfter(lastEntityRow);
-    var lastRangeRowOfEntity = loansOriginalSheet.getRange(lastEntityRow,
-        ColumnNames.letterToColumn(INTEREST_STATEMENT_SPREADSHEET.loansSheet.firstLoansColumn),
-        1,
-        loansOriginalSheet.getLastColumn()
-        - ColumnNames.letterToColumn(INTEREST_STATEMENT_SPREADSHEET.loansSheet.firstLoansColumn) + 1);
-    var rangeRowToCopyDestination = loansOriginalSheet.getRange(lastEntityRow + 1,
-        ColumnNames.letterToColumn(INTEREST_STATEMENT_SPREADSHEET.loansSheet.firstLoansColumn),
-        1,
-        loansOriginalSheet.getLastColumn()
-        - ColumnNames.letterToColumn(INTEREST_STATEMENT_SPREADSHEET.loansSheet.firstLoansColumn) + 1);
-    lastRangeRowOfEntity.copyTo(rangeRowToCopyDestination);
-}
-
-function buildEffortToInsert(data) {
-    //TODO
-    var row = [];
-    var interestRatePercent = data.interestRate / 100;
-    row[ColumnNames.letterToColumnStart0('A')] = data.loanReference;
-    row[ColumnNames.letterToColumnStart0('B')] = '';
-    row[ColumnNames.letterToColumnStart0('C')] = data.entityName;
-    row[ColumnNames.letterToColumnStart0('D')] = data.amountBorrowed;
-    row[ColumnNames.letterToColumnStart0('E')] = data.dateBorrowed;
-    row[ColumnNames.letterToColumnStart0('F')] = '';
-    row[ColumnNames.letterToColumnStart0('G')] = data.dueDate;
-    row[ColumnNames.letterToColumnStart0('H')] = interestRatePercent;
-    row[ColumnNames.letterToColumnStart0('I')] = interestRatePercent * data.amountBorrowed;
-    row[ColumnNames.letterToColumnStart0('J')] = 'No';
-    row[ColumnNames.letterToColumnStart0('K')] = data.ballooninvestment;
-    row[ColumnNames.letterToColumnStart0('L')] = '';
-    row[ColumnNames.letterToColumnStart0('M')] = data.borrowerEntity;
-    return row;
-}
-
-
-function getLastEffortRow(entityName) {
-//TODO
-    var lastRow = -1;
-    var allLoans = getAllLoansFirstThreeColumns();
-    var loanReference = getLastLoanReferenceOfEntity(entityName);
-    if(loanReference !== null) { // A loan of this entity has already been imported
-        for(var i=0; i < allLoans.length; i++){
-            var currentLoanReference = allLoans[i][ColumnNames.letterToColumnStart0(INTEREST_STATEMENT_SPREADSHEET.loansSheet.loanReferenceColumn)];
-            if( currentLoanReference === loanReference)
-                lastRow = i + INTEREST_STATEMENT_SPREADSHEET.loansSheet.firstLoanRow;
-        }
-        return lastRow;
-    }
-    else { // First loan of this entity to be imported
-        var beforeEntityLoan = getLastLoanOfEntityBeforeThisEntity(entityName);
-        if(beforeEntityLoan !== null) {
-            var beforeEntityName = beforeEntityLoan[ColumnNames.letterToColumnStart0(INTEREST_STATEMENT_SPREADSHEET.loansSheet.entityNameColumn)];
-            for (var i = 0; i < allLoans.length; i++) {
-                var currentLoanEntityName = allLoans[i][ColumnNames.letterToColumnStart0(INTEREST_STATEMENT_SPREADSHEET.loansSheet.entityNameColumn)];
-                if (currentLoanEntityName === beforeEntityName)
-                    lastRow = i + INTEREST_STATEMENT_SPREADSHEET.loansSheet.firstLoanRow;
+/**
+ * Create efforts to insert from input matrix
+ * @param agent
+ * @param date
+ * @param data form data
+ */
+function createEffortsAndTasksMatrix(agent, date, data) {
+    var retVal = [];
+    for (var property in data) {
+        if (data.hasOwnProperty(property)) {
+            if(property.indexOf('-') !== -1) {
+                // Table data
+                if(data[property]){
+                    // Cell has content
+                    var splittedProp = property.split('-');
+                    var task = tableRows[splittedProp[1]];
+                    var effort = tableColumns[splittedProp[0]];
+                    var number = data[property];
+                    console.log("Effort '" + effort + "' and task '" + task + "' have value: " + number);
+                    for (var i = 0; i < number; i++) {
+                        retVal.push([agent, date, task, effort]);
+                    }
+                }
             }
-            return lastRow;
         }
-        else // First loan of this entity to be imported and no entity with a name before this one in the list of loans
-            return INTEREST_STATEMENT_SPREADSHEET.loansSheet.firstLoanRow - 1;
     }
+    return retVal;
+}
+
+/**
+ * Get the list of agents
+ * @returns {*} The list of agents
+ */
+function getAgents() {
+    return EFFORT_SPREADSHEET.dataValidSheet.sheet.getRange(
+        EFFORT_SPREADSHEET.dataValidSheet.agentsFirstRow,
+        EFFORT_SPREADSHEET.dataValidSheet.agentsCol,
+        EFFORT_SPREADSHEET.dataValidSheet.sheet.getLastRow() - EFFORT_SPREADSHEET.dataValidSheet.agentsFirstRow + 1,
+        1)
+        .getValues()
+        .map(function (el) {
+            return el[0];
+        })
+        .filter(function (el) {
+            return !!el;
+        });
+}
+
+/**
+ * Return the range to import efforts to
+ * @param nbEffortsToImport Number of efforts to import
+ * @returns {*} The range
+ */
+function getEffortsToImportRange(nbEffortsToImport) {
+    return EFFORT_SPREADSHEET.databaseSheet.sheet.getRange(
+        EFFORT_SPREADSHEET.databaseSheet.sheet.getLastRow() + 1,
+        EFFORT_SPREADSHEET.databaseSheet.effortsFirstCol,
+        nbEffortsToImport,
+        EFFORT_SPREADSHEET.databaseSheet.effortsLastCol - EFFORT_SPREADSHEET.databaseSheet.effortsFirstCol + 1);
 }
